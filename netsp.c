@@ -142,6 +142,7 @@ int main(int argc,char **argv)
 
 		mvwprintw(win,2,6,"已上传 %.2f MB",
 				(double)end.up_bytes/1024/1024);
+
 		mvwprintw(win,3,6,"已下载 %.2f MB",
 				(double)end.dn_bytes/1024/1024);
 		mvwprintw(win,5,6,"已上传包数量 %ld",end.up_packs);
@@ -150,8 +151,10 @@ int main(int argc,char **argv)
 				(double)(end.up_bytes-start.up_bytes)/up_times/1024);
 		mvwprintw(win,9,6,"下载速度 %.2f kb/s",
 				(double)(end.dn_bytes-start.dn_bytes)/dn_times/1024);
-		wrefresh(win);
 
+		wrefresh(win);
+		wclear(win);
+		box(win,0,0);
 	}
 
 	return 0;

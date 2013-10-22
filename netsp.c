@@ -9,10 +9,10 @@
 
 typedef struct
 {
-	unsigned long up_bytes;
-	unsigned long dn_bytes;
-	unsigned long up_packs;
-	unsigned long dn_packs;
+	unsigned long long int up_bytes;
+	unsigned long long int dn_bytes;
+	unsigned long long int up_packs;
+	unsigned long long int dn_packs;
 }SP;
 
 int get_traffic(SP *sp,char *interface)
@@ -48,7 +48,7 @@ int get_traffic(SP *sp,char *interface)
 		return -1;
 	}
 
-	sscanf(buf,"%*[^:]: %ld %ld %*d %*d %*d %*d %*d %*d %ld %ld",
+	sscanf(buf,"%*[^:]: %lld %lld %*d %*d %*d %*d %*d %*d %lld %lld",
 			&sp->dn_bytes,&sp->dn_packs,
 			&sp->up_bytes,&sp->up_packs);
 

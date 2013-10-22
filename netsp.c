@@ -48,7 +48,7 @@ int get_traffic(SP *sp,char *interface)
 		return -1;
 	}
 
-	sscanf(buf,"%*[^:]: %lld %lld %*d %*d %*d %*d %*d %*d %lld %lld",
+	sscanf(buf,"%*[^:]: %lld %lld %*s %*s %*s %*s %*s %*s %lld %lld",
 			&sp->dn_bytes,&sp->dn_packs,
 			&sp->up_bytes,&sp->up_packs);
 

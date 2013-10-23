@@ -96,11 +96,20 @@ int main(int argc,char **argv)
 	initscr();
 	curs_set(0);
 	noecho();
+	if(has_colors())
+	{
+		start_color();
+		use_default_colors();
+		init_pair(1,COLOR_CYAN,-1);
+		init_pair(2,COLOR_GREEN,-1);
+	}
 
 	getmaxyx(stdscr,y,x);
 	win=newwin(12,30,y/2-10/2,x/2-30/2);
 	refresh();
+	wattron(win,COLOR_PAIR(1));
 	box(win,0,0);
+	wattroff(win,COLOR_PAIR(1));
 	wrefresh(win);
 	pthread_create(&thread,NULL,(void *)_quit,win);
 
@@ -140,6 +149,7 @@ int main(int argc,char **argv)
 			start.up_bytes=temp.up_bytes;
 		}
 
+		wattron(win,COLOR_PAIR(2));
 		mvwprintw(win,2,6,"已上传 %.2f MB",
 				(double)end.up_bytes/1024/1024);
 
@@ -152,9 +162,12 @@ int main(int argc,char **argv)
 		mvwprintw(win,9,6,"下载速度 %.2f kb/s",
 				(double)(end.dn_bytes-start.dn_bytes)/dn_times/1024);
 
+		wattroff(win,COLOR_PAIR(2));
 		wrefresh(win);
 		wclear(win);
+		wattron(win,COLOR_PAIR(1));
 		box(win,0,0);
+		wattroff(win,COLOR_PAIR(1));
 	}
 
 	return 0;

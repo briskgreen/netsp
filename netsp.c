@@ -6,8 +6,6 @@
 #include <ncurses.h>
 #include <pthread.h>
 #include <locale.h>
-#include <sys/types.h>
-#include <regex.h>
 
 typedef struct
 {
@@ -16,28 +14,6 @@ typedef struct
 	unsigned long long int up_packs;
 	unsigned long long int dn_packs;
 }SP;
-
-int is_interface(char *buf,char *interface)
-{
-	regex_t preg;
-	regmatch_t pmatch[1];
-	char reg[64]={0};
-
-	snprintf(reg,sizeof(reg)+1,"^[[:space:]]\\+%s:",interface);
-	if(regcomp(&preg,reg,0) != 0)
-	{
-		regfree(&preg);
-		return 0;
-	}
-	if(regexec(&preg,buf,1,pmatch,0) != 0)
-	{
-		regfree(&preg);
-		return 0;
-	}
-	regfree(&preg);
-
-	return 1;
-}
 
 int get_traffic(SP *sp,char *interface)
 {
@@ -51,16 +27,7 @@ int get_traffic(SP *sp,char *interface)
 		return -1;
 	}
 
-	while(getline(&buf,&len,fp) != -1)
-	{
-		if(is_interface(buf,interface))
-			break;
-
-		free(buf);
-		buf=NULL;
-	}
-
-	/*while(!feof(fp))
+	while(!feof(fp))
 	{
 		getline(&buf,&len,fp);
 		if(buf == NULL)
@@ -71,7 +38,7 @@ int get_traffic(SP *sp,char *interface)
 		
 		free(buf);
 		buf=NULL;
-	}*/
+	}
 
 	if(feof(fp))
 	{
@@ -149,7 +116,8 @@ int main(int argc,char **argv)
 	while(1)
 	{
 		get_traffic(&temp,argv[1]);
-		sleep(1);
+		usleep(500000);
+		//sleep(1);
 		++up_times;
 		++dn_times;
 		get_traffic(&end,argv[1]);

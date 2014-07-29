@@ -159,9 +159,9 @@ int main(int argc,char **argv)
 		mvwprintw(win,5,6,"已上传包数量 %ld",end.up_packs);
 		mvwprintw(win,6,6,"已下载包数量 %ld",end.dn_packs);
 		mvwprintw(win,8,6,"上传速度 %.2f kb/s",
-				(double)(end.up_bytes-start.up_bytes)/up_times/1024);
+				(double)(end.up_bytes-start.up_bytes)/up_times/1024*2);
 		mvwprintw(win,9,6,"下载速度 %.2f kb/s",
-				(double)(end.dn_bytes-start.dn_bytes)/dn_times/1024);
+				(double)(end.dn_bytes-start.dn_bytes)/dn_times/1024*2);
 
 		wattroff(win,COLOR_PAIR(2));
 		wrefresh(win);

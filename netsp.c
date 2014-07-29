@@ -81,6 +81,10 @@ int main(int argc,char **argv)
 {
 	unsigned long up_times=0;
 	unsigned long dn_times=0;
+	double up_bytes;
+	double dn_bytes;
+	double up_sp;
+	double dn_sp;
 	SP start,end,temp;
 	WINDOW *win;
 	int x,y;
@@ -151,17 +155,32 @@ int main(int argc,char **argv)
 		}
 
 		wattron(win,COLOR_PAIR(2));
-		mvwprintw(win,2,6,"已上传 %.2f MB",
-				(double)end.up_bytes/1024/1024);
+		up_bytes=(double)end.up_bytes/1024/1024;
+		dn_bytes=(double)end.dn_bytes/1024/1024;
 
-		mvwprintw(win,3,6,"已下载 %.2f MB",
-				(double)end.dn_bytes/1024/1024);
+		if(up_bytes < 1024)
+			mvwprintw(win,2,6,"已上传 %.2f MB",up_bytes);
+		else
+			mvwprintw(win,2,6,"已上传 %.2f GB",up_bytes/1024);
+		if(dn_bytes < 1024)
+			mvwprintw(win,3,6,"已下载 %.2f MB",dn_bytes);
+		else
+			mvwprintw(win,3,6,"已下载 %.2f GB",dn_bytes/1024);
+
 		mvwprintw(win,5,6,"已上传包数量 %ld",end.up_packs);
 		mvwprintw(win,6,6,"已下载包数量 %ld",end.dn_packs);
-		mvwprintw(win,8,6,"上传速度 %.2f kb/s",
-				(double)(end.up_bytes-start.up_bytes)/up_times/1024*2);
-		mvwprintw(win,9,6,"下载速度 %.2f kb/s",
-				(double)(end.dn_bytes-start.dn_bytes)/dn_times/1024*2);
+
+		up_sp=(double)(end.up_bytes-start.up_bytes)/up_times/1024*2;
+		dn_sp=(double)(end.dn_bytes-start.dn_bytes)/up_times/1024*2;
+
+		if(up_sp < 1024)
+			mvwprintw(win,8,6,"上传速度 %.2f kb/s",up_sp);
+		else
+			mvwprintw(win,8,6,"上传速度 %.2f mb/s",up_sp/1024);
+		if(dn_sp < 1024)
+			mvwprintw(win,9,6,"下载速度 %.2f kb/s",dn_sp);
+		else
+			mvwprintw(win,9,6,"下载速度 %.2f mb/s",dn_sp/1024);
 
 		wattroff(win,COLOR_PAIR(2));
 		wrefresh(win);
